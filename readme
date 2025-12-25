@@ -1,0 +1,169 @@
+myshell 用户手册
+===============
+
+简介
+----
+myshell 是一个简单的命令行 shell，支持基本的 shell 功能，包括：
+- 内置命令
+- 外部程序执行
+- I/O 重定向
+- 后台进程执行
+- 批处理模式
+- 项目在Ubuntu25.04上编译并测试通过
+- 提交的压缩包中附带自行测试的文档
+
+安装和编译
+--------
+1. 确保系统已安装 gcc 编译器
+2. 解压源代码包
+3. 在源代码目录中运行：
+   $ make
+
+   ls -la myshell # 检查是否编译成功
+
+   make clean # 如果需要清理重新编译
+   make
+4. 编译完成后会生成可执行文件 "myshell"
+
+运行
+----
+交互模式：
+  $ ./myshell
+
+批处理模式：
+  $ ./myshell script.txt #脚本可以直接编写（cat > script.txt），也可以从文件中读取（提前用vim等编辑器编写好）
+
+内置命令
+-------
+1. cd [directory]
+   更改当前工作目录。如果没有指定目录，显示当前目录。
+   示例：
+     $ cd /home/user
+     $ cd ..          # 返回上一级目录（无法退出myshell_project目录）
+     $ cd             # 显示当前目录
+
+2. clr
+   清除终端屏幕。
+   示例：
+     $ clr
+
+3. dir [directory]
+   列出指定目录的内容。如果不指定目录，显示当前目录。
+   示例：
+     $ dir
+     $ dir /etc
+
+4. environ
+   显示所有环境变量。
+   示例：
+     $ environ
+
+5. echo [text]
+   显示文本信息。多个空格和制表符会被缩减为一个空格。
+   示例：
+     $ echo Hello World
+     $ echo "This is a test"
+
+6. help
+   显示此帮助手册，使用 more 命令分页显示。
+   示例：
+     $ help
+
+7. pause
+   暂停 shell 执行，直到用户按下回车键。
+   示例：
+     $ pause
+
+8. quit
+   退出 myshell。
+   示例：
+     $ quit
+
+外部程序执行
+----------
+myshell 可以执行系统中的任何可执行程序。
+示例：
+  $ ls -la
+  $ ps aux
+  $ date
+
+I/O 重定向
+---------
+myshell 支持输入和输出重定向：
+
+1. 输入重定向 (<)
+   从文件读取输入而不是从键盘。
+   示例：
+     $ wc < file.txt          # 统计文件行数、字数
+
+2. 输出重定向 (>)
+   将输出写入文件（覆盖模式）。
+   示例：
+     $ ls > listing.txt       # 将 ls 输出保存到文件
+     $ echo "test" > output.txt
+
+3. 追加重定向 (>>)
+   将输出追加到文件末尾。
+   示例：
+     $ echo "new line" >> log.txt
+
+4. 组合重定向
+   可以同时使用输入和输出重定向。
+   示例：
+     $ sort < input.txt > output.txt
+
+后台执行
+-------
+在命令末尾添加 & 符号可以在后台运行程序。
+示例：
+  $ sleep 10 &                # 后台休眠10秒
+  $ find / -name "*.txt" > results.txt 2> errors.txt &
+
+注意事项：
+- 后台进程在 shell 退出后可能继续运行
+- 使用 jobs 命令查看后台进程（标准系统命令）
+
+环境变量
+-------
+myshell 设置了以下环境变量：
+- shell: myshell 可执行文件的完整路径
+- SHELL: 与 shell 相同
+
+可以像在普通 shell 中一样访问环境变量：
+  $ echo $PATH
+
+批处理模式
+---------
+myshell 支持从文件读取命令执行：
+  $ ./myshell script.txt
+
+批处理文件应包含要执行的命令，每行一个命令。
+示例 script.txt 内容：
+  echo "开始批处理"
+  dir
+  ls -la
+  echo "批处理完成"
+
+特别说明
+-------
+1. 批处理脚本直接编写时（cat > script.txt），可以直接在终端中输入命令，按 Ctrl+D 结束输入。
+2. 有些功能的编写不是很完善，可以参考附带的测试文档截图和命令
+
+文件结构
+-------
+# C或者Cpp都可 若使用Cpp则需要修改Makefile中的编译选项 
+# 提供的文件在windows中编写使用的是cpp 在Ubuntu中编写使用的是c
+myshell 项目包含以下文件：
+- Makefile: 编译配置文件
+- myshell.h: 头文件
+- myshell.c: 主程序
+- utility.c: 工具函数
+- Readme: 本手册
+
+作者
+----
+PIPERAS
+
+版本
+----
+FInal - 最终版本（2025年12月22日）
